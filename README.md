@@ -1,5 +1,5 @@
 # Android QR Code Scanner by Dan Tech
-
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/dantech0xff/compose-barcode-scanner)
 ![](https://img.shields.io/badge/Kotlin-Compose-green)
 ![](https://img.shields.io/badge/Google--Billing-blue)
 ![](https://img.shields.io/badge/Camera--X-red)
