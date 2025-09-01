@@ -38,9 +38,7 @@ class GetAppSettingFlowUseCase @Inject constructor(
                 add(SettingItemUIState.SwitchUIState(SettingId.VIBRATE.value, title = context.getString(R.string.vibrate), isEnable = it.isEnableVibrate))
                 add(SettingItemUIState.SwitchUIState(SettingId.KEEP_SCANNING.value, title = context.getString(R.string.keep_scanning), isEnable = it.isKeepScanning))
 
-                if (BuildConfig.IS_FORCE_PREMIUM) {
                     add(SettingItemUIState.SwitchUIState(SettingId.PREMIUM.value, title = context.getString(R.string.force_premium), isEnable = it.isPremium))
-                }
 
                 add(SettingItemUIState.DividerUIState(UUID.randomUUID().hashCode()))
 
