@@ -1,3 +1,4 @@
+---
 name: Build and Release APK
 
 on:
@@ -13,74 +14,95 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      
-    - name: Cache Gradle dependencies
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-          
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-      
-    - name: Clean and Build Release APK
-      run: |
-        ./gradlew clean
-        ./gradlew assembleRelease
-      
-    - name: Get APK info
-      id: apk-info
-      run: |
-        APK_PATH=$(find app/build/outputs/apk/release -name "*.apk" | head -1)
-        if [ -z "$APK_PATH" ]; then
-          echo "APK not found!"
-          exit 1
-        fi
-        echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
-        
-        # Extract version info from the APK path or use git tag
-        if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-          VERSION=${GITHUB_REF#refs/tags/}
-        else
-          VERSION=$(grep 'versionName' app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
-        fi
-        
-        APK_NAME="qr-code-scanner-${VERSION}.apk"
-        echo "apk_name=$APK_NAME" >> $GITHUB_OUTPUT
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-        
-    - name: Rename APK
-      run: |
-        mv "${{ steps.apk-info.outputs.apk_path }}" "app/build/outputs/apk/release/${{ steps.apk-info.outputs.apk_name }}"
-        
-    - name: Upload APK to Release
-      if: github.event_name == 'release'
-      uses: softprops/action-gh-release@v1
-      with:
-        files: app/build/outputs/apk/release/${{ steps.apk-info.outputs.apk_name }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Upload APK as Artifact (for tag pushes)
-      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-artifact@v4
-      with:
-        name: qr-code-scanner-${{ steps.apk-info.outputs.version }}
-        path: app/build/outputs/apk/release/${{ steps.apk-info.outputs.apk_name }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Clean and Build Release APK
+        run: |
+          ./gradlew clean
+          ./gradlew assembleRelease
+
+      - name: Get APK info
+        id: apk-info
+        run: |
+          # Find the release APK
+          APK_PATH=$(find app/build/outputs/apk/release -name "*.apk" -type f | head -1)
+          if [ -z "$APK_PATH" ]; then
+            echo "❌ APK not found in app/build/outputs/apk/release/"
+            echo "Available files:"
+            find app/build/outputs/apk/ -type f -name "*.apk" || echo "No APK files found"
+            exit 1
+          fi
+          echo "✅ Found APK: $APK_PATH"
+          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+
+          # Extract version info from git tag or gradle file
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+            echo "Using version from tag: $VERSION"
+          else
+            VERSION=$(grep 'versionName' app/build.gradle.kts | \
+              sed 's/.*"\(.*\)".*/\1/')
+            echo "Using version from gradle: $VERSION"
+          fi
+
+          APK_NAME="qr-code-scanner-${VERSION}.apk"
+          echo "apk_name=$APK_NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Rename APK
+        run: |
+          mv "${{ steps.apk-info.outputs.apk_path }}" \
+            "app/build/outputs/apk/release/${{ steps.apk-info.outputs.apk_name }}"
+
+      - name: Upload APK to Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app/build/outputs/apk/release/${{ steps.apk-info.outputs.apk_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload APK as Artifact (for tag pushes)
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: qr-code-scanner-${{ steps.apk-info.outputs.version }}
+          path: app/build/outputs/apk/release/${{ steps.apk-info.outputs.apk_name }}
+
+      - name: Build Summary
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ steps.apk-info.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **APK Name**: ${{ steps.apk-info.outputs.apk_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **APK Path**: ${{ steps.apk-info.outputs.apk_path }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Event**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "- **Status**: APK attached to release" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Status**: APK uploaded as artifact" >> $GITHUB_STEP_SUMMARY
+          fi
