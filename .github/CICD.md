@@ -20,7 +20,24 @@ This repository includes GitHub Actions workflows for automated building and rel
 
 ## Creating a Release
 
-To create a new release with an APK:
+### Option 1: Using the Release Script (Recommended)
+
+The repository includes a helper script to streamline the release process:
+
+```bash
+./scripts/release.sh v1.0.0-alpha-06
+```
+
+This script will:
+- Validate the version format
+- Check if you're on the main/master branch
+- Optionally update the version in `app/build.gradle.kts`
+- Create and push the git tag
+- Provide links to track the build progress
+
+### Option 2: Manual Process
+
+To create a new release manually:
 
 1. **Create and push a tag**:
    ```bash
