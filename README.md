@@ -1,5 +1,6 @@
 # Android QR Code Scanner by Dan Tech
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/dantech0xff/compose-barcode-scanner)
+[![Build Test](https://github.com/dantech0xff/compose-qr-code-scanner/actions/workflows/build.yml/badge.svg)](https://github.com/dantech0xff/compose-qr-code-scanner/actions/workflows/build.yml)
 ![](https://img.shields.io/badge/Kotlin-Compose-green)
 ![](https://img.shields.io/badge/Google--Billing-blue)
 ![](https://img.shields.io/badge/Camera--X-red)
@@ -7,6 +8,7 @@
 ![](https://img.shields.io/badge/Hilt-gray)
 ![](https://img.shields.io/badge/Flow-yellow)
 ![](https://img.shields.io/badge/Room--Database-black)
+![](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue)
 
 This project is built with Jetpack Compose, CameraX, ML Kit and my handsome attitude.
 This is for my learning purpose in order to get familiar with Jetpack Compose, MLKit and CameraX.
@@ -48,6 +50,10 @@ Feel free to use it in your project.
 - [x] Animation
 
 ### Download, Clone, or do anything for your own purpose, I don't care!
+
+## Download APK
+
+Get the latest APK from the [Releases](../../releases) page. Each release automatically includes a built APK file ready for installation.
 
 ### Love it? Give me a star, I will be happy!
 
