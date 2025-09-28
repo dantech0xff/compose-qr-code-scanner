@@ -56,9 +56,3 @@ Feel free to use it in your project.
 Get the latest APK from the [Releases](../../releases) page. Each release automatically includes a built APK file ready for installation.
 
 ### Love it? Give me a star, I will be happy!
-
-### Happy Coding!
-
-```
-Life runs on code!
-```
