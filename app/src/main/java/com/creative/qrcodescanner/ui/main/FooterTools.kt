@@ -26,7 +26,7 @@ import com.creative.qrcodescanner.ui.theme.QRCodeScannerTheme
 
 @Composable
 @Stable
-fun BoxScope.FooterTools(navToHistory: () -> Unit, pickGallery: () -> Unit) {
+fun BoxScope.FooterTools(navToHistory: () -> Unit, pickGallery: () -> Unit, navToGenerate: () -> Unit) {
     Image(
         painter = painterResource(id = R.drawable.add_photo_alternate),
         contentDescription = stringResource(R.string.gallery_picker),
@@ -39,6 +39,21 @@ fun BoxScope.FooterTools(navToHistory: () -> Unit, pickGallery: () -> Unit) {
             .background(color = Color(0x901c1c1c), shape = CircleShape)
             .clip(CircleShape)
             .clickable(onClick = pickGallery)
+            .padding(18.dp)
+    )
+
+    Image(
+        painter = painterResource(id = R.drawable.icon_qr_generate),
+        contentDescription = stringResource(R.string.generate_qr_button),
+        contentScale = ContentScale.Inside,
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(16.dp)
+            .shadow(Color(0x901c1c1c).copy(alpha = 0.5f), blurRadius = 12.dp, borderRadius = 32.dp, spread = 0.dp, offsetY = 1.dp, offsetX = 1.dp)
+            .size(64.dp)
+            .background(color = Color(0x901c1c1c), shape = CircleShape)
+            .clip(CircleShape)
+            .clickable(onClick = navToGenerate)
             .padding(18.dp)
     )
 
@@ -63,7 +78,7 @@ fun BoxScope.FooterTools(navToHistory: () -> Unit, pickGallery: () -> Unit) {
 fun FooterToolsPreview() {
     QRCodeScannerTheme {
         Box(modifier = Modifier.fillMaxWidth()) {
-            FooterTools(navToHistory = {}, pickGallery = {})
+            FooterTools(navToHistory = {}, pickGallery = {}, navToGenerate = {})
         }
     }
 }
