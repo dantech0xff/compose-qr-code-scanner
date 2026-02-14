@@ -35,12 +35,14 @@ class GenerateQRViewModel @Inject constructor() : ViewModel() {
                 EncodeHintType.CHARACTER_SET to "UTF-8"
             )
             val bitMatrix = QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints)
-            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-            for (x in 0 until size) {
-                for (y in 0 until size) {
-                    bitmap.setPixel(x, y, if (bitMatrix[x, y]) Color.BLACK else Color.WHITE)
+            val pixels = IntArray(size * size)
+            for (y in 0 until size) {
+                for (x in 0 until size) {
+                    pixels[y * size + x] = if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
                 }
             }
+            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            bitmap.setPixels(pixels, 0, size, 0, 0, size, size)
             _uiState.value = GenerateQRUIState.Success(bitmap)
         } catch (e: Exception) {
             _uiState.value = GenerateQRUIState.Error(e.message ?: "Failed to generate QR code")
