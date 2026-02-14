@@ -73,4 +73,10 @@
     <string name="only_2_99_first_3_months">2.99$ First 3 Months</string>
     <string name="processing_purchase">Processing purchase...</string>
     <string name="billing_service_is_not_available_please_check_your_network_connection_and_try_again">Billing Service is not available, please check your network connection and try again.</string>
+    <string name="generate_qr_code">Generate QR Code</string>
+    <string name="generate_qr_button">Generate QR</string>
+    <string name="enter_text_to_generate_qr">Enter text to generate QR code</string>
+    <string name="generate">Generate</string>
+    <string name="qr_code_generated">QR Code Generated</string>
+    <string name="please_enter_text">Please enter text</string>
 </resources>

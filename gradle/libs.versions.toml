@@ -20,6 +20,7 @@ datastore_version = "1.0.0"
 billing_version = "6.1.0"
 firebaseCrashlyticsBuildtools = "2.9.9"
 ksp_version = "1.9.0-1.0.13"
+zxing_version = "3.5.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,6 +72,7 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 
 android-billing-client = { group = "com.android.billingclient", name = "billing", version.ref = "billing_version" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing_version" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

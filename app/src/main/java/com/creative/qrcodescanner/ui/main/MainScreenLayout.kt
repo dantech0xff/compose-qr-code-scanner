@@ -210,6 +210,11 @@ fun MainScreenLayout(vm: MainViewModel, appNavHost: NavHostController) {
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )
                     }
+                },
+                navToGenerate = remember {
+                    {
+                        appNavHost.navigate(AppScreen.GENERATE.value)
+                    }
                 })
         }
 
